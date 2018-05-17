@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Mongo IP print</title>
+        <style>
+            /* *{
+                background-color: rgba(17, 17, 17, 0.7);
+            } */
+            body{
+                text-align: center;
+                background-color:rgb(103, 102, 105);
+                background-image: url("http://hdqwalls.com/wallpapers/localhost-4k.jpg");
+                margin: 0;
+                background-attachment: fixed;
+                background-size: cover;
+                color: white;
+            }
+            .country{
+                padding: 2px;
+                margin: 0;
+                /* float: left; */
+            }
+            .city{
+                padding: 1px;
+                margin-top: 7px;
+                /* float: left; */
+            }
+            .result{
+                padding: 12px;
+                margin-top: 5px;
+                border: 1px solid black;
+                max-width: 50%;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(255, 255, 255, 0.9);
+                color: black;
+            }
+            #code{
+                text-align: left;
+                margin-left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(255, 255, 255, 0.9);
+                padding: 12px;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="background-color: rgba(17, 17, 17, 0.9);">The Code</h1>
+        <p id="code">
+            <code>
+                require 'vendor/autoload.php';<br>
+                $client = new MongoDB\Client("mongodb://localhost:27017");<br>
+                $collection = $client->ip2location->db11;<br>
+                $result = $collection->find();<br>
+            
+                $counter = 0;<br>
+                foreach ($result as $entry) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if ($counter == 100){  <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;div class='result'&gt;";<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;h2 class='country'&gt;" . $entry['country_name'] . '&lt;/h2&gt;';<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;h4 class='city'&gt;" . $entry['city_name'] . '&lt;/h4&gt;';<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;p&gt;&lt;b&gt;Longitude &amp; Latitude:&lt;/b&gt; " . $entry['longitude'] . "  " . $entry['latitude'] . '&lt;br&gt;';<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;b&gt;Time Zone:&lt;/b&gt; " . $entry['time_zone'] . '&lt;/p&gt;';<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;echo "&lt;/div&gt;";<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;$counter++;<br>
+                }<br>
+            </pre>
+        </p>
+        <h2 style="background-color: rgba(17, 17, 17, 0.9); padding:1px">Information</h2>
+        <h3 style="background-color: rgba(17, 17, 17, 0.9); padding:1px">Having 1941000 records is insane</h3>
+        <p id="output">
+            
+        </p>
+        <!-- jQuery JS 3.1.0 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script>
+            $.ajax({
+                type: "post",
+                url: "./get-ip.php",
+                success: function (response) {
+                    $("#output").append(response);
+                }
+            });
+        </script>
+    </body>
+</html>

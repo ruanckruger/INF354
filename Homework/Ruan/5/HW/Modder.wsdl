@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://localhost/Modder" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Modder" targetNamespace="http://localhost:9080/Modder">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://localhost:9080/soap-websiteservice-wsdl/Modder">
+      <xsd:element name="TwoNumbersMod">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="x" type="xsd:int" />
+            <xsd:element name="y" type="xsd:int"></xsd:element>    
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="modResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Result" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:complexType name="TwoNumbersModType">
+        <xsd:sequence>
+            <xsd:element name="x" type="xsd:int"></xsd:element>
+            <xsd:element name="y" type="xsd:int"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TwoNumbersMod">
+    <wsdl:part element="tns:TwoNumbersMod" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="modResponse">
+    <wsdl:part element="tns:modResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="Modder">
+    <wsdl:operation name="TwoNumbersMod">
+      <wsdl:input message="tns:TwoNumbersModRequest"/>
+      <wsdl:output message="tns:modResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ModderSOAP" type="tns:Modder">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TwoNumbersMod">
+      <soap:operation soapAction="http://localhost/Modder/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Modder">
+    <wsdl:port binding="tns:ModderSOAP" name="ModderSOAP">
+      <soap:address location="http://localhost/modder_service.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Get Country Currencies</title>
+    </head>
+    <body>
+        <h1>Country List</h1>
+        <h2>Convert From</h2>
+        <select id="countryList">
+            <option>Select a country</option>
+        </select>
+        <h3 id="currency"></h3>
+        
+        <h2>Convert To</h2>
+        <select id="countryToList">
+            <option>Select a country</option>
+        </select>
+        <h3 id="toCurrency"></h3>
+        
+        <button type="submit" id="calcEx">Calculate Exchange</button>
+        <h1>Exchange Rate</h1>
+
+        <h3 id="exchange"></h3>
+        <!-- jQuery JS 3.1.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        var countryFrom = 0, countryTo = 0;
+        $.ajax({
+            type: "POST",
+            url: "./get-countries.php",
+            success: function (response) {
+                // console.log(response);
+                let countriesJson = JSON.parse(response);
+                let countries = countriesJson.Table;
+                countries.forEach(country => {
+                    $("#countryList").append("<option>"+country.Name+"</option>");                    
+                    $("#countryToList").append("<option>"+country.Name+"</option>");
+                });
+            }
+        });
+        $("#countryList").change(function (e) { 
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "./get-currency.php",
+                data: {country_name: $("#countryList").val()},
+                success: function (response) {
+                    console.log(response);
+                    let CurrenciesJson = JSON.parse(response);
+                    let Currencies = CurrenciesJson.Table;
+                    $("#currency").html("Country: " + $("#countryList").val() + "<br>" 
+                    + "Currency : " + Currencies[0]["Currency"] + "<br>" 
+                    + "Currency Code: " + Currencies[0]["CurrencyCode"]);
+                    countryFrom = Currencies[0]["CurrencyCode"];
+                }
+            });
+        });
+        $("#countryToList").change(function (e) { 
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "./get-currency.php",
+                data: {country_name: $("#countryToList").val()},
+                success: function (response) {
+                    console.log(response);
+                    let CurrenciesJson = JSON.parse(response);
+                    let Currencies = CurrenciesJson.Table;
+                    $("#toCurrency").html("Country: " + $("#countryToList").val() + "<br>" 
+                    + "Currency : " + Currencies[0]["Currency"] + "<br>" 
+                    + "Currency Code: " + Currencies[0]["CurrencyCode"]);
+                    countryTo = Currencies[0]["CurrencyCode"];
+                    $("#countryToList").disabled = false;
+                    // $("#countryToList").removeAttr("disabled");
+                }
+            });
+        });
+        $("#calcEx").click(function (e){
+            e.preventDefault();
+            $.ajax({
+                type: "GET",
+                url: "./convert-currencies.php",
+                data: {from: countryFrom, to:countryTo},
+                success: function (response) {
+                    let exchange = 1 * response;
+                    $("#exchange").html("1 "+ countryFrom + " = " + exchange + " " + countryTo)
+                }
+            });
+        });
+    </script>
+    </body>
+</html>
